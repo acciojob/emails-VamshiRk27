@@ -9,11 +9,13 @@ public class Gmail extends Email {
     int inboxCapacity; //maximum number of mails inbox can store
     //Inbox: Stores mails. Each mail has date (Date), sender (String), message (String). It is guaranteed that message is distinct for all mails.
     //Trash: Stores mails. Each mail has date (Date), sender (String), message (String)
-    List<Mail> Inbox = new ArrayList<>();
-    List<Mail> Trash=new ArrayList<>();
+    List<Mail> Inbox;
+    List<Mail> Trash;
     public Gmail(String emailId, int inboxCapacity) {
         super(emailId);
         this.inboxCapacity=inboxCapacity;
+        this.Inbox= new ArrayList<>();
+        this.Trash=new ArrayList<>();
     }
 
     public void receiveMail(Date date, String sender, String message){
@@ -21,13 +23,12 @@ public class Gmail extends Email {
         // It is guaranteed that:
         // 1. Each mail in the inbox is distinct.
         // 2. The mails are received in non-decreasing order. This means that the date of a new mail is greater than equal to the dates of mails received already.
-        if(Inbox.size()<inboxCapacity){
-            Inbox.add(new Mail(date,sender,message));
+        if(Inbox.size()==inboxCapacity){
+            Mail m=Inbox.get(0);
+            Trash.add(m);
+            Inbox.remove(m);
         }
-        if(Inbox.size()>=inboxCapacity){
-            Trash.add(Inbox.remove(0));
-            Inbox.add(new Mail(date,sender,message));
-        }
+        Inbox.add(new Mail(date,sender,message));
     }
 
     public void deleteMail(String message){
@@ -40,8 +41,10 @@ public class Gmail extends Email {
                 break;
             }
         }
-        Inbox.remove(req);
-        Trash.add(req);
+        if(req!=null){
+            Trash.add(req);
+            Inbox.remove(req);
+        }
     }
 
     public String findLatestMessage(){
@@ -73,7 +76,7 @@ public class Gmail extends Email {
         //It is guaranteed that start date <= end date
         int count=0;
         for(Mail m:Inbox){
-            if(m.getDate().after(start) || m.getDate().after(end)){
+            if(m.getDate().after(start) || m.getDate().before(end)){
                 count++;
             }
         }

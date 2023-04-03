@@ -63,9 +63,7 @@ public class Email {
 
     public boolean checkSpecial(String password){
         for(int i=0;i<password.length();i++){
-            if (!Character.isDigit(password.charAt(i))
-                    && !Character.isLetter(password.charAt(i))
-                    && !Character.isWhitespace(password.charAt(i))) {
+            if (!Character.isDigit(password.charAt(i)) && !Character.isLetter(password.charAt(i)) && !Character.isWhitespace(password.charAt(i))) {
                 return true;
             }
         }
