@@ -29,43 +29,36 @@ public class Email {
         // 4. It contains at least one digit
         // 5. It contains at least one special character. Any character apart from alphabets and digits is a special character
         if(getPassword().equals(oldPassword)){
-            if(newPassword.length()>=8 && checkUpperCase(newPassword) && checkLowerCase(newPassword) && checkDigit(newPassword) && checkSpecial(newPassword)){
+            if(isValid(newPassword)){
                 password=newPassword;
             }
         }
     }
-    public boolean checkUpperCase(String password){
+    public boolean isValid(String password){
+        Boolean cap=false;
+        Boolean small=false;
+        Boolean digit=false;
+        Boolean special=false;
+        if(password.length()<8){
+            return false;
+        }
         for(int i=0;i<password.length();i++){
-            if('A'-password.charAt(i)>=0){
-                return true;
+            char ch=password.charAt(i);
+            if(ch>='A' && ch<='Z'){
+                cap=true;
+            }
+            else if(ch>='a' && ch<='z'){
+                small=true;
+            }
+            else if(ch>='0' && ch<='9'){
+                digit=true;
+            }
+            else{
+                special=true;
             }
         }
-        return false;
-    }
-
-    public boolean checkLowerCase(String password){
-        for(int i=0;i<password.length();i++){
-            if(password.charAt(i)-'a'>=0){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean checkDigit(String password){
-        for(int i=0;i<password.length();i++){
-            if(password.charAt(i)-'0'>=0 && password.charAt(i)-'0'<=9){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean checkSpecial(String password){
-        for(int i=0;i<password.length();i++){
-            if (!Character.isDigit(password.charAt(i)) && !Character.isLetter(password.charAt(i)) && !Character.isWhitespace(password.charAt(i))) {
-                return true;
-            }
+        if(cap && small && digit && special){
+            return true;
         }
         return false;
     }
